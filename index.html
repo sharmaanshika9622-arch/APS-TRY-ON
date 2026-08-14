@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APS SmartFit AI - Uniform Try-On</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg-dark: #080f1e;
+      --card-bg: #0f192e;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-blue: #3b82f6;
+      --accent-light-blue: #60a5fa;
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      --badge-bg: rgba(59, 130, 246, 0.12);
+      --badge-green-bg: rgba(34, 197, 94, 0.15);
+      --badge-green-text: #4ade80;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 50px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(8, 15, 30, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: #ffffff;
+      color: #080f1e;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .status-pill {
+      background: var(--badge-green-bg);
+      color: var(--badge-green-text);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--badge-green-text);
+      border-radius: 50%;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      width: 100%;
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 30px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-title span {
+      color: var(--accent-light-blue);
+    }
+
+    /* Grid Layout */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 25px;
+      align-items: start;
+    }
+
+    /* Preview Canvas Area */
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .viewport-box {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      background: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    video, canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .placeholder-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      z-index: 1;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 15px;
+      padding: 18px;
+      border-top: 1px solid var(--card-border);
+      background: rgba(15, 25, 46, 0.6);
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Sidebar Controls */
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-label {
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .uniform-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .description {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Size Box */
+    .size-recommend-box {
+      background: rgba(8, 15, 30, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .size-recommend-box .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .size-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent-light-blue);
+      margin-top: 5px;
+    }
+
+    /* Slider adjustments */
+    .adjustment-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 16px;
+    }
+
+    .slider-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .slider-row input[type="range"] {
+      width: 55%;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    input[type="file"] { display: none; }
+
+    @media (max-width: 900px) {
+      .grid-layout { grid-template-columns: 1fr; }
+      header { padding: 15px 20px; }
+      .hero-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-logo">
+      <div class="logo-badge">APS</div>
+      <div>
+        <div class="brand-title">APS SmartFit</div>
+        <div class="brand-subtitle">AI Uniform Experience</div>
+      </div>
+    </div>
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      AI READY
+    </div>
+  </header>
+
+  <div class="container">
+    <h1 class="hero-title">Your uniform <span>preview</span></h1>
+
+    <div class="grid-layout">
+      
+      <div class="preview-card">
+        <div class="viewport-box">
+          <video id="webcam" playsinline style="display:none;"></video>
+          <canvas id="output-canvas" width="640" height="480"></canvas>
+          <span class="placeholder-text" id="placeholder-text">Upload a photo or start live camera to preview</span>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
+          <label class="btn btn-secondary">
+            📁 Upload Photo
+            <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+          </label>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div>
+          <div class="section-label">Selected Uniform</div>
+          <div class="uniform-title">Summer Uniform</div>
+          <p class="description" style="margin-top: 8px;">
+            This prototype demonstrates the basic virtual overlay concept. Fits APS Rakhmuthi primary & secondary uniforms.
+          </p>
+        </div>
+
+        <div class="size-recommend-box">
+          <div class="label">Recommended Size</div>
+          <div class="size-number" id="size-display">--</div>
+        </div>
+
+        <div class="adjustment-group">
+          <div class="section-label">Fine Tune Alignment</div>
+          <div class="slider-row">
+            <span>Size Scale</span>
+            <input type="range" id="scale-slider" min="1.8" max="4.5" step="0.05" value="3.20">
+          </div>
+          <div class="slider-row">
+            <span>Vertical Offset</span>
+            <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const videoElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('output-canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+    const sizeDisplay = document.getElementById('size-display');
+    const placeholderText = document.getElementById('placeholder-text');
+
+    const scaleSlider = document.getElementById('scale-slider');
+    const ySlider = document.getElementById('y-slider');
+
+    const uniformImg = new Image();
+    uniformImg.src = 'uniform.png';
+
+    let pose;
+    let camera;
+    let currentSourceImage = null;
+
+    function calculateSize(shoulderWidthPx) {
+      if (shoulderWidthPx < 130) return "S";
+      if (shoulderWidthPx >= 130 && shoulderWidthPx < 170) return "M";
+      if (shoulderWidthPx >= 170 && shoulderWidthPx < 210) return "L";
+      return "XL";
+    }
+
+    function onResults(results) {
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+      if (currentSourceImage) {
+        canvasCtx.drawImage(currentSourceImage, 0, 0, canvasElement.width, canvasElement.height);
+      } else if (results.image) {
+        canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+      }
+
+      if (results.poseLandmarks) {
+        placeholderText.style.display = 'none';
+        const landmarks = results.poseLandmarks;
+        const leftShoulder = landmarks[11];
+        const rightShoulder = landmarks[12];
+
+        if (leftShoulder.visibility > 0.3 && rightShoulder.visibility > 0.3) {
+          const lX = leftShoulder.x * canvasElement.width;
+          const lY = leftShoulder.y * canvasElement.height;
+          const rX = rightShoulder.x * canvasElement.width;
+          const rY = rightShoulder.y * canvasElement.height;
+
+          const dx = lX - rX;
+          const dy = lY - rY;
+          const shoulderDistance = Math.sqrt(dx * dx + dy * dy);
+          const angle = Math.atan2(dy, dx);
+
+          sizeDisplay.innerText = calculateSize(shoulderDistance);
+
+          const userScale = parseFloat(scaleSlider.value);
+          const userYShift = parseFloat(ySlider.value);
+
+          const uniformWidth = shoulderDistance * userScale;
+          const aspectRatio = uniformImg.height / uniformImg.width;
+          const uniformHeight = uniformWidth * aspectRatio;
+
+          const midShoulderX = (lX + rX) / 2;
+          const midShoulderY = (lY + rY) / 2;
+
+          const anchorY = midShoulderY + (uniformHeight * userYShift);
+
+          canvasCtx.save();
+          canvasCtx.translate(midShoulderX, anchorY);
+          canvasCtx.rotate(angle);
+
+          canvasCtx.drawImage(
+            uniformImg,
+            -uniformWidth / 2,
+            -uniformHeight * 0.12,
+            uniformWidth,
+            uniformHeight
+          );
+
+          canvasCtx.restore();
+        }
+      }
+    }
+
+    function initPose() {
+      pose = new Pose({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+      });
+
+      pose.setOptions({
+        modelComplexity: 1,
+        smoothLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+
+      pose.onResults(onResults);
+    }
+
+    function startWebcam() {
+      currentSourceImage = null;
+      if (!pose) initPose();
+      if (camera) camera.stop();
+
+      videoElement.style.display = 'none';
+
+      camera = new Camera(videoElement, {
+        onFrame: async () => {
+          if (!currentSourceImage) {
+            await pose.send({ image: videoElement });
+          }
+        },
+        width: 640,
+        height: 480
+      });
+
+      camera.start();
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (camera) camera.stop();
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = async () => {
+          currentSourceImage = img;
+          
+          canvasElement.width = 640;
+          canvasElement.height = 480;
+
+          if (!pose) initPose();
+          await pose.send({ image: img });
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    window.onload = () => {
+      initPose();
+    };
+  </script>
+</body>
+</html>
