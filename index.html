@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APS SmartFit AI - Uniform Try-On</title>
+  <title>APS SmartFit AI - Virtual Uniform Experience</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -12,19 +12,20 @@
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
     :root {
-      --bg-dark: #080f1e;
-      --card-bg: #0f192e;
+      --bg-dark: #070d19;
+      --card-bg: #0d172a;
       --card-border: rgba(255, 255, 255, 0.08);
       --accent-blue: #3b82f6;
-      --accent-light-blue: #60a5fa;
+      --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
       --text-main: #ffffff;
       --text-muted: #94a3b8;
-      --badge-bg: rgba(59, 130, 246, 0.12);
-      --badge-green-bg: rgba(34, 197, 94, 0.15);
-      --badge-green-text: #4ade80;
+      --green-badge: #4ade80;
+      --green-bg: rgba(34, 197, 94, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -33,17 +34,21 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    /* Navbar */
+    /* Top Navigation Bar */
     header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 50px;
+      padding: 18px 60px;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(8, 15, 30, 0.8);
-      backdrop-filter: blur(10px);
+      background: rgba(7, 13, 25, 0.85);
+      backdrop-filter: blur(12px);
     }
 
     .brand-logo {
@@ -54,12 +59,11 @@
 
     .logo-badge {
       background: #ffffff;
-      color: #080f1e;
+      color: #070d19;
       font-weight: 800;
       font-size: 0.85rem;
-      padding: 6px 10px;
+      padding: 6px 12px;
       border-radius: 8px;
-      letter-spacing: 0.5px;
     }
 
     .brand-title {
@@ -70,12 +74,11 @@
     .brand-subtitle {
       font-size: 0.75rem;
       color: var(--text-muted);
-      margin-top: 1px;
     }
 
     .status-pill {
-      background: var(--badge-green-bg);
-      color: var(--badge-green-text);
+      background: var(--green-bg);
+      color: var(--green-badge);
       font-size: 0.75rem;
       font-weight: 700;
       padding: 6px 14px;
@@ -88,30 +91,207 @@
     .status-dot {
       width: 7px;
       height: 7px;
-      background: var(--badge-green-text);
+      background: var(--green-badge);
       border-radius: 50%;
     }
 
-    /* Main Container */
+    /* Container */
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 0 20px;
       width: 100%;
     }
 
-    .hero-title {
-      font-size: 2.8rem;
+    /* HERO LANDING SECTION */
+    .hero-section {
+      padding: 70px 0 90px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 50px;
+      align-items: center;
+      min-height: calc(100vh - 80px);
+    }
+
+    .tech-tag {
+      color: var(--accent-blue);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .hero-heading {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .hero-heading span {
+      background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtext {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 35px;
+      max-width: 500px;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(59, 130, 246, 0.45);
+    }
+
+    /* Hero Stats Bar */
+    .hero-features {
+      display: flex;
+      gap: 40px;
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .feature-item .title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .feature-item .sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Hero Graphic Card */
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 30px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 420px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-header-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .avatar-graphic {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .avatar-head {
+      width: 60px;
+      height: 60px;
+      background: #d97706;
+      border-radius: 50%;
+      margin-bottom: 8px;
+    }
+
+    .avatar-body {
+      width: 130px;
+      height: 120px;
+      background: #1e3a8a;
+      border-radius: 16px 16px 6px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+    }
+
+    .scan-line {
+      position: absolute;
+      width: 220px;
+      height: 2px;
+      background: var(--accent-blue);
+      box-shadow: 0 0 12px var(--accent-blue);
+      top: 55%;
+    }
+
+    .tracker-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #60a5fa;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #60a5fa;
+    }
+
+    .dot-tl { top: 30%; left: -30px; }
+    .dot-tr { top: 30%; right: -30px; }
+    .dot-bl { bottom: 20%; left: -30px; }
+    .dot-br { bottom: 20%; right: -30px; }
+
+    .card-footer-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+
+    /* DASHBOARD / TRY-ON APPLICATION SECTION */
+    .app-section {
+      padding: 60px 0 100px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
       font-weight: 800;
       margin-bottom: 30px;
       letter-spacing: -0.5px;
     }
 
-    .hero-title span {
-      color: var(--accent-light-blue);
+    .section-title span {
+      color: #60a5fa;
     }
 
-    /* Grid Layout */
     .grid-layout {
       display: grid;
       grid-template-columns: 1fr 360px;
@@ -119,14 +299,11 @@
       align-items: start;
     }
 
-    /* Preview Canvas Area */
     .preview-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
+      border-radius: 20px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     .viewport-box {
@@ -157,18 +334,18 @@
     .action-bar {
       display: flex;
       gap: 15px;
-      padding: 18px;
+      padding: 20px;
       border-top: 1px solid var(--card-border);
-      background: rgba(15, 25, 46, 0.6);
+      background: rgba(13, 23, 42, 0.6);
     }
 
     .btn {
       flex: 1;
-      padding: 12px 20px;
+      padding: 14px;
       border-radius: 10px;
       font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
+      font-size: 0.9rem;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -178,41 +355,31 @@
       border: none;
     }
 
-    .btn-primary {
-      background: var(--accent-blue);
-      color: #ffffff;
-    }
-
-    .btn-primary:hover {
-      background: #2563eb;
-    }
+    .btn-primary { background: var(--accent-blue); color: #ffffff; }
+    .btn-primary:hover { background: #2563eb; }
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.06);
       color: var(--text-main);
       border: 1px solid var(--card-border);
     }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); }
 
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    /* Sidebar Controls */
     .sidebar-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 24px;
+      border-radius: 20px;
+      padding: 26px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 22px;
     }
 
-    .section-label {
+    .sidebar-label {
       text-transform: uppercase;
       color: var(--text-muted);
       font-size: 0.75rem;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 1px;
     }
 
@@ -228,13 +395,11 @@
       line-height: 1.5;
     }
 
-    /* Size Box */
     .size-recommend-box {
-      background: rgba(8, 15, 30, 0.6);
+      background: rgba(7, 13, 25, 0.7);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: left;
+      border-radius: 14px;
+      padding: 22px;
     }
 
     .size-recommend-box .label {
@@ -244,19 +409,18 @@
     }
 
     .size-number {
-      font-size: 2.8rem;
+      font-size: 3rem;
       font-weight: 800;
-      color: var(--accent-light-blue);
-      margin-top: 5px;
+      color: #60a5fa;
+      margin-top: 4px;
     }
 
-    /* Slider adjustments */
     .adjustment-group {
       display: flex;
       flex-direction: column;
       gap: 12px;
       border-top: 1px solid var(--card-border);
-      padding-top: 16px;
+      padding-top: 18px;
     }
 
     .slider-row {
@@ -277,9 +441,12 @@
     input[type="file"] { display: none; }
 
     @media (max-width: 900px) {
-      .grid-layout { grid-template-columns: 1fr; }
       header { padding: 15px 20px; }
-      .hero-title { font-size: 2rem; }
+      .hero-section { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+      .hero-subtext { margin: 0 auto 30px; }
+      .hero-features { justify-content: center; }
+      .grid-layout { grid-template-columns: 1fr; }
+      .hero-heading { font-size: 2.8rem; }
     }
   </style>
 </head>
@@ -300,54 +467,108 @@
   </header>
 
   <div class="container">
-    <h1 class="hero-title">Your uniform <span>preview</span></h1>
+    
+    <section class="hero-section">
+      <div>
+        <span class="tech-tag">◆ SMART UNIFORM TECHNOLOGY</span>
+        <h1 class="hero-heading">Try your uniform. <span>Virtually.</span></h1>
+        <p class="hero-subtext">
+          Experience your school uniform digitally, preview your selected uniform and receive an AI-based size recommendation.
+        </p>
+        
+        <a href="#tryon-app" class="btn-cta">Start Virtual Try-On →</a>
 
-    <div class="grid-layout">
-      
-      <div class="preview-card">
-        <div class="viewport-box">
-          <video id="webcam" playsinline style="display:none;"></video>
-          <canvas id="output-canvas" width="640" height="480"></canvas>
-          <span class="placeholder-text" id="placeholder-text">Upload a photo or start live camera to preview</span>
-        </div>
-
-        <div class="action-bar">
-          <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
-          <label class="btn btn-secondary">
-            📁 Upload Photo
-            <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
-          </label>
-        </div>
-      </div>
-
-      <div class="sidebar-card">
-        <div>
-          <div class="section-label">Selected Uniform</div>
-          <div class="uniform-title">Summer Uniform</div>
-          <p class="description" style="margin-top: 8px;">
-            This prototype demonstrates the basic virtual overlay concept. Fits APS Rakhmuthi primary & secondary uniforms.
-          </p>
-        </div>
-
-        <div class="size-recommend-box">
-          <div class="label">Recommended Size</div>
-          <div class="size-number" id="size-display">--</div>
-        </div>
-
-        <div class="adjustment-group">
-          <div class="section-label">Fine Tune Alignment</div>
-          <div class="slider-row">
-            <span>Size Scale</span>
-            <input type="range" id="scale-slider" min="1.8" max="4.5" step="0.05" value="3.20">
+        <div class="hero-features">
+          <div class="feature-item">
+            <div class="title">AI</div>
+            <div class="sub">Powered</div>
           </div>
-          <div class="slider-row">
-            <span>Vertical Offset</span>
-            <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
+          <div class="feature-item">
+            <div class="title">LIVE</div>
+            <div class="sub">Camera</div>
+          </div>
+          <div class="feature-item">
+            <div class="title">SMART</div>
+            <div class="sub">Fit Estimate</div>
           </div>
         </div>
       </div>
 
-    </div>
+      <div class="hero-card">
+        <div class="card-header-bar">
+          <span>AI VIRTUAL FIT</span>
+          <span style="color: var(--green-badge);">● LIVE</span>
+        </div>
+
+        <div class="avatar-graphic">
+          <div class="avatar-head"></div>
+          <div class="avatar-body">APS</div>
+          <div class="scan-line"></div>
+
+          <div class="tracker-dot dot-tl"></div>
+          <div class="tracker-dot dot-tr"></div>
+          <div class="tracker-dot dot-bl"></div>
+          <div class="tracker-dot dot-br"></div>
+        </div>
+
+        <div class="card-footer-bar">
+          <span>BODY DETECTION</span>
+          <span>READY</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-section" id="tryon-app">
+      <h2 class="section-title">Your uniform <span>preview</span></h2>
+
+      <div class="grid-layout">
+        
+        <div class="preview-card">
+          <div class="viewport-box">
+            <video id="webcam" playsinline style="display:none;"></video>
+            <canvas id="output-canvas" width="640" height="480"></canvas>
+            <span class="placeholder-text" id="placeholder-text">Upload a photo or start live camera to preview</span>
+          </div>
+
+          <div class="action-bar">
+            <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
+            <label class="btn btn-secondary">
+              📁 Upload Photo
+              <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+            </label>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div>
+            <div class="sidebar-label">Selected Uniform</div>
+            <div class="uniform-title">Summer Uniform</div>
+            <p class="description" style="margin-top: 8px;">
+              This prototype demonstrates the basic virtual overlay concept. Real transparent APS uniform images can be added here.
+            </p>
+          </div>
+
+          <div class="size-recommend-box">
+            <div class="label">Recommended Size</div>
+            <div class="size-number" id="size-display">--</div>
+          </div>
+
+          <div class="adjustment-group">
+            <div class="sidebar-label">Fine Tune Alignment</div>
+            <div class="slider-row">
+              <span>Size Scale</span>
+              <input type="range" id="scale-slider" min="1.8" max="4.5" step="0.05" value="3.20">
+            </div>
+            <div class="slider-row">
+              <span>Vertical Offset</span>
+              <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </div>
 
   <script>
