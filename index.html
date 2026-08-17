@@ -40,7 +40,6 @@
       flex-direction: column;
     }
 
-    /* Navigation Bar */
     header {
       position: sticky;
       top: 0;
@@ -86,7 +85,6 @@
       width: 100%;
     }
 
-    /* HERO LANDING SECTION */
     .hero-section {
       padding: 60px 0;
       display: grid;
@@ -199,7 +197,6 @@
       font-size: 1.1rem;
     }
 
-    /* TRY-ON DASHBOARD SECTION */
     .app-section {
       padding: 40px 0 80px;
       border-top: 1px solid var(--card-border);
@@ -213,7 +210,6 @@
 
     .section-title span { color: var(--accent-green); }
 
-    /* FULL SCREEN CAMERA VIEWPORT */
     .viewport-card {
       background: #000000;
       border: 1px solid var(--card-border);
@@ -269,7 +265,6 @@
       background: rgba(239, 68, 68, 0.9);
     }
 
-    /* ACTION BAR BELOW CAMERA */
     .action-bar {
       display: flex;
       gap: 15px;
@@ -305,7 +300,6 @@
     .btn-capture { background: #0f172a; color: #ffffff; }
     .btn-capture:hover { background: #1e293b; }
 
-    /* DASHBOARD BELOW CAMERA */
     .controls-dashboard {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -416,7 +410,6 @@
 </head>
 <body>
 
-  <!-- Navigation Bar -->
   <header>
     <div class="brand-logo">
       <div class="logo-badge">APS</div>
@@ -432,8 +425,6 @@
   </header>
 
   <div class="container">
-    
-    <!-- HERO LANDING SECTION -->
     <section class="hero-section">
       <div>
         <span class="tech-tag">◆ SMART UNIFORM TECHNOLOGY</span>
@@ -460,11 +451,9 @@
       </div>
     </section>
 
-    <!-- TRY-ON APPLICATION SECTION -->
     <section class="app-section" id="tryon-app">
       <h2 class="section-title">Your uniform <span>preview</span></h2>
 
-      <!-- FULL SCREEN CAMERA VIEWPORT -->
       <div class="viewport-card">
         <div class="distance-banner" id="distance-banner">📏 Stand exactly 1 meter (3 feet) from camera</div>
         <video id="webcam" playsinline style="display:none;"></video>
@@ -472,7 +461,6 @@
         <span class="placeholder-text" id="placeholder-text">Start camera or upload photo to view full-screen preview</span>
       </div>
 
-      <!-- MAIN ACTION BUTTONS BELOW CAMERA -->
       <div class="action-bar">
         <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
         <label class="btn btn-secondary">
@@ -482,10 +470,7 @@
         <button class="btn btn-capture" onclick="takeSnapshot()">📸 Take Photo</button>
       </div>
 
-      <!-- CONTROLS DASHBOARD BELOW CAMERA -->
       <div class="controls-dashboard">
-        
-        <!-- Selected Size Display Card -->
         <div class="dashboard-card">
           <div class="card-title-row">
             <span class="sidebar-label">Shirt Size (Requires 1 Meter Distance)</span>
@@ -501,30 +486,27 @@
           </div>
         </div>
 
-        <!-- Independent Shirt Adjustment Controls -->
         <div class="dashboard-card">
           <div class="card-title-row">
-            <span class="sidebar-label">Adjust Shirt Fit & Proportions</span>
+            <span class="sidebar-label">Fine-Tune Alignment</span>
           </div>
           <div class="adjustment-group">
             <div class="slider-row">
-              <span>Shirt Width (Chest/Shoulders)</span>
-              <input type="range" id="width-slider" min="0.8" max="1.8" step="0.02" value="1.10" oninput="updateSizeFromSlider()">
+              <span>Width Fine-Tune</span>
+              <input type="range" id="width-slider" min="3.0" max="6.0" step="0.1" value="4.5">
             </div>
             <div class="slider-row">
-              <span>Shirt Height (Length)</span>
-              <input type="range" id="height-slider" min="0.8" max="1.8" step="0.02" value="1.00">
+              <span>Height Fine-Tune</span>
+              <input type="range" id="height-slider" min="2.0" max="5.0" step="0.1" value="3.5">
             </div>
             <div class="slider-row">
               <span>Collar / Neck Position</span>
-              <input type="range" id="y-slider" min="-0.15" max="0.30" step="0.01" value="0.02">
+              <input type="range" id="y-slider" min="-0.60" max="0.20" step="0.01" value="-0.25">
             </div>
           </div>
         </div>
-
       </div>
     </section>
-
   </div>
 
   <script>
@@ -548,12 +530,14 @@
     let currentSourceImage = null;
     let currentSizeMode = 'alpha'; 
     let isAtOneMeter = false;
+    let lastShoulderPx = 0;
 
-    // Strict 1-Meter Range Calibration
-    const MIN_SHOULDER_PX_1M = 200; // Minimum pixel width at 1m
-    const MAX_SHOULDER_PX_1M = 260; // Maximum pixel width at 1m
+    const MIN_SHOULDER_PX_1M = 140; 
+    const MAX_SHOULDER_PX_1M = 280; 
 
     function checkDistanceAndSetSize(shoulderPx) {
+      lastShoulderPx = shoulderPx;
+
       if (shoulderPx < MIN_SHOULDER_PX_1M) {
         isAtOneMeter = false;
         distanceBanner.innerText = "⚠️ Please move closer (Stand at 1 meter)";
@@ -571,19 +555,19 @@
         distanceBanner.innerText = "✅ Distance Optimal (1 Meter)";
         distanceBanner.classList.remove('warning');
         sizeDisplay.classList.remove('warning');
-        updateSizeFromSlider();
+        calculateBodySize(shoulderPx);
       }
     }
 
-    function updateSizeFromSlider() {
+    function calculateBodySize(shoulderPx) {
       if (!isAtOneMeter) return;
 
-      const val = parseFloat(widthSlider.value);
-      const alphaSizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-      const numSizes   = ["28",  "30", "32", "34", "36", "38",  "40",  "42"];
+      const alphaSizes = ["XS", "S", "M", "L", "XL", "XXL"];
+      const numSizes   = ["32", "34", "36", "38", "40", "42"];
 
-      let idx = Math.floor(((val - 0.8) / (1.8 - 0.8)) * alphaSizes.length);
-      idx = Math.max(0, Math.min(alphaSizes.length - 1, idx));
+      let ratio = (shoulderPx - MIN_SHOULDER_PX_1M) / (MAX_SHOULDER_PX_1M - MIN_SHOULDER_PX_1M);
+      let idx = Math.floor(ratio * numSizes.length);
+      idx = Math.max(0, Math.min(numSizes.length - 1, idx));
 
       sizeDisplay.innerText = currentSizeMode === 'alpha' ? alphaSizes[idx] : numSizes[idx];
     }
@@ -593,7 +577,9 @@
       document.getElementById('btn-alpha').classList.toggle('active', mode === 'alpha');
       document.getElementById('btn-num').classList.toggle('active', mode === 'numeric');
       sizeModeLabel.innerText = mode === 'alpha' ? 'ALPHA SIZE' : 'NUMERIC SIZE';
-      if (isAtOneMeter) updateSizeFromSlider();
+      if (isAtOneMeter && lastShoulderPx > 0) {
+        calculateBodySize(lastShoulderPx);
+      }
     }
 
     function takeSnapshot() {
@@ -638,7 +624,6 @@
 
           const baseAspectRatio = uniformImg.height / uniformImg.width;
 
-          // Independent Width and Height math
           const uniformWidth = shoulderDistance * widthScale;
           const uniformHeight = (shoulderDistance * baseAspectRatio) * heightScale;
 
@@ -651,11 +636,10 @@
           canvasCtx.translate(midShoulderX, anchorY);
           canvasCtx.rotate(angle);
 
-          // Draw ground-level relative to neck collar line
           canvasCtx.drawImage(
             uniformImg,
             -uniformWidth / 2,
-            0,
+            -uniformHeight * 0.15,
             uniformWidth,
             uniformHeight
           );
