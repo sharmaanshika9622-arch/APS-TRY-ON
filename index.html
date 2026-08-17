@@ -398,7 +398,7 @@
     }
 
     .slider-row input[type="range"] {
-      width: 60%;
+      width: 55%;
       accent-color: var(--accent-green);
       cursor: pointer;
     }
@@ -501,19 +501,23 @@
           </div>
         </div>
 
-        <!-- Shirt Adjustment Controls -->
+        <!-- Independent Shirt Adjustment Controls -->
         <div class="dashboard-card">
           <div class="card-title-row">
-            <span class="sidebar-label">Adjust Shirt Fit & Size</span>
+            <span class="sidebar-label">Adjust Shirt Fit & Proportions</span>
           </div>
           <div class="adjustment-group">
             <div class="slider-row">
-              <span>Shirt Size Scale</span>
-              <input type="range" id="scale-slider" min="2.0" max="4.4" step="0.05" value="3.20" oninput="updateSizeFromSlider()">
+              <span>Shirt Width (Chest/Shoulders)</span>
+              <input type="range" id="width-slider" min="0.8" max="1.8" step="0.02" value="1.10" oninput="updateSizeFromSlider()">
             </div>
             <div class="slider-row">
-              <span>Vertical Offset</span>
-              <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
+              <span>Shirt Height (Length)</span>
+              <input type="range" id="height-slider" min="0.8" max="1.8" step="0.02" value="1.00">
+            </div>
+            <div class="slider-row">
+              <span>Collar / Neck Position</span>
+              <input type="range" id="y-slider" min="-0.15" max="0.30" step="0.01" value="0.02">
             </div>
           </div>
         </div>
@@ -532,7 +536,8 @@
     const placeholderText = document.getElementById('placeholder-text');
     const distanceBanner = document.getElementById('distance-banner');
 
-    const scaleSlider = document.getElementById('scale-slider');
+    const widthSlider = document.getElementById('width-slider');
+    const heightSlider = document.getElementById('height-slider');
     const ySlider = document.getElementById('y-slider');
 
     const uniformImg = new Image();
@@ -550,21 +555,18 @@
 
     function checkDistanceAndSetSize(shoulderPx) {
       if (shoulderPx < MIN_SHOULDER_PX_1M) {
-        // Person is too far (> 1 meter)
         isAtOneMeter = false;
         distanceBanner.innerText = "⚠️ Please move closer (Stand at 1 meter)";
         distanceBanner.classList.add('warning');
         sizeDisplay.innerText = "Move closer to 1m mark";
         sizeDisplay.classList.add('warning');
       } else if (shoulderPx > MAX_SHOULDER_PX_1M) {
-        // Person is too close (< 1 meter)
         isAtOneMeter = false;
         distanceBanner.innerText = "⚠️ Please step back (Stand at 1 meter)";
         distanceBanner.classList.add('warning');
         sizeDisplay.innerText = "Step back to 1m mark";
         sizeDisplay.classList.add('warning');
       } else {
-        // Person is at 1 meter
         isAtOneMeter = true;
         distanceBanner.innerText = "✅ Distance Optimal (1 Meter)";
         distanceBanner.classList.remove('warning');
@@ -576,19 +578,12 @@
     function updateSizeFromSlider() {
       if (!isAtOneMeter) return;
 
-      const val = parseFloat(scaleSlider.value);
+      const val = parseFloat(widthSlider.value);
       const alphaSizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
       const numSizes   = ["28",  "30", "32", "34", "36", "38",  "40",  "42"];
 
-      let idx = 0;
-      if (val < 2.3) idx = 0;
-      else if (val < 2.6) idx = 1;
-      else if (val < 2.9) idx = 2;
-      else if (val < 3.2) idx = 3;
-      else if (val < 3.5) idx = 4;
-      else if (val < 3.8) idx = 5;
-      else if (val < 4.1) idx = 6;
-      else idx = 7;
+      let idx = Math.floor(((val - 0.8) / (1.8 - 0.8)) * alphaSizes.length);
+      idx = Math.max(0, Math.min(alphaSizes.length - 1, idx));
 
       sizeDisplay.innerText = currentSizeMode === 'alpha' ? alphaSizes[idx] : numSizes[idx];
     }
@@ -635,15 +630,17 @@
           const shoulderDistance = Math.sqrt(dx * dx + dy * dy);
           const angle = Math.atan2(dy, dx);
 
-          // Check if distance is 1m before showing size
           checkDistanceAndSetSize(shoulderDistance);
 
-          const userScale = parseFloat(scaleSlider.value);
+          const widthScale = parseFloat(widthSlider.value);
+          const heightScale = parseFloat(heightSlider.value);
           const userYShift = parseFloat(ySlider.value);
 
-          const uniformWidth = shoulderDistance * userScale;
-          const aspectRatio = uniformImg.height / uniformImg.width;
-          const uniformHeight = uniformWidth * aspectRatio;
+          const baseAspectRatio = uniformImg.height / uniformImg.width;
+
+          // Independent Width and Height math
+          const uniformWidth = shoulderDistance * widthScale;
+          const uniformHeight = (shoulderDistance * baseAspectRatio) * heightScale;
 
           const midShoulderX = (lX + rX) / 2;
           const midShoulderY = (lY + rY) / 2;
@@ -654,10 +651,11 @@
           canvasCtx.translate(midShoulderX, anchorY);
           canvasCtx.rotate(angle);
 
+          // Draw ground-level relative to neck collar line
           canvasCtx.drawImage(
             uniformImg,
             -uniformWidth / 2,
-            -uniformHeight * 0.12,
+            0,
             uniformWidth,
             uniformHeight
           );
