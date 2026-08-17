@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APS SmartFit AI - Fullscreen Uniform Experience</title>
+  <title>APS SmartFit AI - Virtual Uniform Experience</title>
 
   <!-- MediaPipe Pose Engine -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
@@ -22,6 +22,7 @@
       --text-main: #0f172a;
       --text-muted: #64748b;
       --status-bg: rgba(16, 185, 129, 0.12);
+      --warning-red: #ef4444;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,6 +31,9 @@
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-light);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(5, 150, 105, 0.04) 0%, transparent 40%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
@@ -44,9 +48,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 40px;
+      padding: 18px 60px;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(12px);
     }
 
@@ -78,11 +82,138 @@
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 30px 20px;
+      padding: 0 20px;
       width: 100%;
     }
 
-    /* FULL-SCREEN CAMERA SECTION */
+    /* HERO LANDING SECTION */
+    .hero-section {
+      padding: 60px 0;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .tech-tag {
+      color: var(--accent-green);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .hero-heading {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .hero-heading span {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtext {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 30px;
+      max-width: 500px;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(5, 150, 105, 0.35);
+    }
+
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 30px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 380px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .card-header-bar, .card-footer-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .avatar-graphic {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar-head {
+      width: 60px;
+      height: 60px;
+      background: #f59e0b;
+      border-radius: 50%;
+      margin-bottom: 8px;
+    }
+
+    .avatar-body {
+      width: 130px;
+      height: 110px;
+      background: #059669;
+      border-radius: 16px 16px 6px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    /* TRY-ON DASHBOARD SECTION */
+    .app-section {
+      padding: 40px 0 80px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+    }
+
+    .section-title span { color: var(--accent-green); }
+
+    /* FULL SCREEN CAMERA VIEWPORT */
     .viewport-card {
       background: #000000;
       border: 1px solid var(--card-border);
@@ -91,8 +222,8 @@
       box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
       position: relative;
       width: 100%;
-      height: 75vh;
-      min-height: 550px;
+      height: 70vh;
+      min-height: 500px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -117,7 +248,6 @@
       border-radius: 12px;
     }
 
-    /* Floating Distance Calibration Alert */
     .distance-banner {
       position: absolute;
       top: 20px;
@@ -132,6 +262,11 @@
       backdrop-filter: blur(8px);
       z-index: 2;
       border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .distance-banner.warning {
+      background: rgba(239, 68, 68, 0.9);
     }
 
     /* ACTION BAR BELOW CAMERA */
@@ -167,13 +302,10 @@
     }
     .btn-secondary:hover { background: #f1f5f9; }
 
-    .btn-capture {
-      background: #0f172a;
-      color: #ffffff;
-    }
+    .btn-capture { background: #0f172a; color: #ffffff; }
     .btn-capture:hover { background: #1e293b; }
 
-    /* SIZE DISPLAY & CONTROLS DASHBOARD (BELOW CAMERA) */
+    /* DASHBOARD BELOW CAMERA */
     .controls-dashboard {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -204,7 +336,6 @@
       letter-spacing: 1px;
     }
 
-    /* Interactive Size Mode Selector Button */
     .mode-toggle-group {
       display: flex;
       background: #f1f5f9;
@@ -246,6 +377,11 @@
       margin-top: 8px;
     }
 
+    .size-main-number.warning {
+      font-size: 1.2rem;
+      color: var(--warning-red);
+    }
+
     .adjustment-group {
       display: flex;
       flex-direction: column;
@@ -270,6 +406,8 @@
     input[type="file"] { display: none; }
 
     @media (max-width: 900px) {
+      header { padding: 15px 20px; }
+      .hero-section { grid-template-columns: 1fr; text-align: center; }
       .controls-dashboard { grid-template-columns: 1fr; }
       .viewport-card { height: 50vh; }
       .action-bar { flex-direction: column; }
@@ -284,72 +422,104 @@
       <div class="logo-badge">APS</div>
       <div>
         <div class="brand-title">APS SmartFit</div>
-        <div class="brand-subtitle">AI Virtual Fitting Room</div>
+        <div class="brand-subtitle">AI Uniform Experience</div>
       </div>
     </div>
     <div class="status-pill">
       <div class="status-dot"></div>
-      CALIBRATED FOR 1 METER
+      AI READY
     </div>
   </header>
 
   <div class="container">
     
-    <!-- FULL SCREEN CAMERA VIEWPORT -->
-    <div class="viewport-card">
-      <div class="distance-banner">📏 Stand approximately 1 meter (3 feet) from camera</div>
-      <video id="webcam" playsinline style="display:none;"></video>
-      <canvas id="output-canvas" width="1280" height="720"></canvas>
-      <span class="placeholder-text" id="placeholder-text">Start camera or upload photo to view full-screen preview</span>
-    </div>
-
-    <!-- MAIN CONTROL BUTTONS BELOW CAMERA -->
-    <div class="action-bar">
-      <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
-      <label class="btn btn-secondary">
-        📁 Upload Photo
-        <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
-      </label>
-      <button class="btn btn-capture" onclick="takeSnapshot()">📸 Take Photo</button>
-    </div>
-
-    <!-- CONTROL DASHBOARD BELOW CAMERA -->
-    <div class="controls-dashboard">
-      
-      <!-- Recommended Size Card -->
-      <div class="dashboard-card">
-        <div class="card-title-row">
-          <span class="sidebar-label">Recommended Size (at 1 Meter)</span>
-          <div class="mode-toggle-group">
-            <button class="toggle-btn active" id="btn-alpha" onclick="setSizeMode('alpha')">Alphabetical</button>
-            <button class="toggle-btn" id="btn-num" onclick="setSizeMode('numeric')">Numeric</button>
-          </div>
-        </div>
-
-        <div class="size-display-box">
-          <div class="sidebar-label" id="size-mode-label">ALPHA SIZE</div>
-          <div class="size-main-number" id="size-display">--</div>
-        </div>
+    <!-- HERO LANDING SECTION -->
+    <section class="hero-section">
+      <div>
+        <span class="tech-tag">◆ SMART UNIFORM TECHNOLOGY</span>
+        <h1 class="hero-heading">Try your uniform. <span>Virtually.</span></h1>
+        <p class="hero-subtext">
+          Experience your school uniform digitally, preview your selected uniform, and receive AI-based size recommendations.
+        </p>
+        <a href="#tryon-app" class="btn-cta">Start Virtual Try-On →</a>
       </div>
 
-      <!-- Fine-Tune Manual Overlay Adjustments -->
-      <div class="dashboard-card">
-        <div class="card-title-row">
-          <span class="sidebar-label">Fine Tune Fit Overlay</span>
+      <div class="hero-card">
+        <div class="card-header-bar">
+          <span>AI VIRTUAL FIT</span>
+          <span style="color: var(--accent-green);">● LIVE</span>
         </div>
-        <div class="adjustment-group">
-          <div class="slider-row">
-            <span>Uniform Scale</span>
-            <input type="range" id="scale-slider" min="1.8" max="4.5" step="0.05" value="3.20">
-          </div>
-          <div class="slider-row">
-            <span>Vertical Offset</span>
-            <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
-          </div>
+        <div class="avatar-graphic">
+          <div class="avatar-head"></div>
+          <div class="avatar-body">APS</div>
+        </div>
+        <div class="card-footer-bar">
+          <span>BODY DETECTION</span>
+          <span>READY</span>
         </div>
       </div>
+    </section>
 
-    </div>
+    <!-- TRY-ON APPLICATION SECTION -->
+    <section class="app-section" id="tryon-app">
+      <h2 class="section-title">Your uniform <span>preview</span></h2>
+
+      <!-- FULL SCREEN CAMERA VIEWPORT -->
+      <div class="viewport-card">
+        <div class="distance-banner" id="distance-banner">📏 Stand exactly 1 meter (3 feet) from camera</div>
+        <video id="webcam" playsinline style="display:none;"></video>
+        <canvas id="output-canvas" width="1280" height="720"></canvas>
+        <span class="placeholder-text" id="placeholder-text">Start camera or upload photo to view full-screen preview</span>
+      </div>
+
+      <!-- MAIN ACTION BUTTONS BELOW CAMERA -->
+      <div class="action-bar">
+        <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
+        <label class="btn btn-secondary">
+          📁 Upload Photo
+          <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+        </label>
+        <button class="btn btn-capture" onclick="takeSnapshot()">📸 Take Photo</button>
+      </div>
+
+      <!-- CONTROLS DASHBOARD BELOW CAMERA -->
+      <div class="controls-dashboard">
+        
+        <!-- Selected Size Display Card -->
+        <div class="dashboard-card">
+          <div class="card-title-row">
+            <span class="sidebar-label">Shirt Size (Requires 1 Meter Distance)</span>
+            <div class="mode-toggle-group">
+              <button class="toggle-btn active" id="btn-alpha" onclick="setSizeMode('alpha')">Alphabetical</button>
+              <button class="toggle-btn" id="btn-num" onclick="setSizeMode('numeric')">Numeric</button>
+            </div>
+          </div>
+
+          <div class="size-display-box">
+            <div class="sidebar-label" id="size-mode-label">ALPHA SIZE</div>
+            <div class="size-main-number" id="size-display">--</div>
+          </div>
+        </div>
+
+        <!-- Shirt Adjustment Controls -->
+        <div class="dashboard-card">
+          <div class="card-title-row">
+            <span class="sidebar-label">Adjust Shirt Fit & Size</span>
+          </div>
+          <div class="adjustment-group">
+            <div class="slider-row">
+              <span>Shirt Size Scale</span>
+              <input type="range" id="scale-slider" min="2.0" max="4.4" step="0.05" value="3.20" oninput="updateSizeFromSlider()">
+            </div>
+            <div class="slider-row">
+              <span>Vertical Offset</span>
+              <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
   </div>
 
@@ -360,6 +530,7 @@
     const sizeDisplay = document.getElementById('size-display');
     const sizeModeLabel = document.getElementById('size-mode-label');
     const placeholderText = document.getElementById('placeholder-text');
+    const distanceBanner = document.getElementById('distance-banner');
 
     const scaleSlider = document.getElementById('scale-slider');
     const ySlider = document.getElementById('y-slider');
@@ -370,35 +541,66 @@
     let pose;
     let camera;
     let currentSourceImage = null;
-    let currentSizeMode = 'alpha'; // Default mode: 'alpha' or 'numeric'
+    let currentSizeMode = 'alpha'; 
+    let isAtOneMeter = false;
 
-    // Real-world shoulder pixel distance calibration at 1 meter distance
-    function calculateSize(shoulderPx) {
+    // Strict 1-Meter Range Calibration
+    const MIN_SHOULDER_PX_1M = 200; // Minimum pixel width at 1m
+    const MAX_SHOULDER_PX_1M = 260; // Maximum pixel width at 1m
+
+    function checkDistanceAndSetSize(shoulderPx) {
+      if (shoulderPx < MIN_SHOULDER_PX_1M) {
+        // Person is too far (> 1 meter)
+        isAtOneMeter = false;
+        distanceBanner.innerText = "⚠️ Please move closer (Stand at 1 meter)";
+        distanceBanner.classList.add('warning');
+        sizeDisplay.innerText = "Move closer to 1m mark";
+        sizeDisplay.classList.add('warning');
+      } else if (shoulderPx > MAX_SHOULDER_PX_1M) {
+        // Person is too close (< 1 meter)
+        isAtOneMeter = false;
+        distanceBanner.innerText = "⚠️ Please step back (Stand at 1 meter)";
+        distanceBanner.classList.add('warning');
+        sizeDisplay.innerText = "Step back to 1m mark";
+        sizeDisplay.classList.add('warning');
+      } else {
+        // Person is at 1 meter
+        isAtOneMeter = true;
+        distanceBanner.innerText = "✅ Distance Optimal (1 Meter)";
+        distanceBanner.classList.remove('warning');
+        sizeDisplay.classList.remove('warning');
+        updateSizeFromSlider();
+      }
+    }
+
+    function updateSizeFromSlider() {
+      if (!isAtOneMeter) return;
+
+      const val = parseFloat(scaleSlider.value);
       const alphaSizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
       const numSizes   = ["28",  "30", "32", "34", "36", "38",  "40",  "42"];
 
       let idx = 0;
-      if (shoulderPx < 180) idx = 0;
-      else if (shoulderPx < 210) idx = 1;
-      else if (shoulderPx < 240) idx = 2;
-      else if (shoulderPx < 270) idx = 3;
-      else if (shoulderPx < 300) idx = 4;
-      else if (shoulderPx < 330) idx = 5;
-      else if (shoulderPx < 360) idx = 6;
+      if (val < 2.3) idx = 0;
+      else if (val < 2.6) idx = 1;
+      else if (val < 2.9) idx = 2;
+      else if (val < 3.2) idx = 3;
+      else if (val < 3.5) idx = 4;
+      else if (val < 3.8) idx = 5;
+      else if (val < 4.1) idx = 6;
       else idx = 7;
 
-      return currentSizeMode === 'alpha' ? alphaSizes[idx] : numSizes[idx];
+      sizeDisplay.innerText = currentSizeMode === 'alpha' ? alphaSizes[idx] : numSizes[idx];
     }
 
-    // Interactive Size Mode Unit Switcher
     function setSizeMode(mode) {
       currentSizeMode = mode;
       document.getElementById('btn-alpha').classList.toggle('active', mode === 'alpha');
       document.getElementById('btn-num').classList.toggle('active', mode === 'numeric');
       sizeModeLabel.innerText = mode === 'alpha' ? 'ALPHA SIZE' : 'NUMERIC SIZE';
+      if (isAtOneMeter) updateSizeFromSlider();
     }
 
-    // Photo Snapshot Capability
     function takeSnapshot() {
       const dataURL = canvasElement.toDataURL('image/png');
       const link = document.createElement('a');
@@ -433,7 +635,8 @@
           const shoulderDistance = Math.sqrt(dx * dx + dy * dy);
           const angle = Math.atan2(dy, dx);
 
-          sizeDisplay.innerText = calculateSize(shoulderDistance);
+          // Check if distance is 1m before showing size
+          checkDistanceAndSetSize(shoulderDistance);
 
           const userScale = parseFloat(scaleSlider.value);
           const userYShift = parseFloat(ySlider.value);
