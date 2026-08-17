@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APS SmartFit AI - Virtual Uniform Experience</title>
+  <title>APS SmartFit AI - Fullscreen Uniform Experience</title>
 
   <!-- MediaPipe Pose Engine -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
@@ -12,7 +12,6 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* LIGHT THEME PALETTE */
     :root {
       --bg-light: #f8fafc;
       --card-bg: #ffffff;
@@ -26,20 +25,15 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-light);
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(5, 150, 105, 0.04) 0%, transparent 40%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
     }
 
     /* Navigation Bar */
@@ -50,18 +44,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 60px;
+      padding: 16px 40px;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(12px);
     }
 
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
+    .brand-logo { display: flex; align-items: center; gap: 12px; }
     .logo-badge {
       background: #0f172a;
       color: #ffffff;
@@ -70,16 +59,8 @@
       padding: 6px 12px;
       border-radius: 8px;
     }
-
-    .brand-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .brand-subtitle {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
+    .brand-title { font-size: 1.1rem; font-weight: 700; }
+    .brand-subtitle { font-size: 0.75rem; color: var(--text-muted); }
 
     .status-pill {
       background: var(--status-bg);
@@ -92,174 +73,26 @@
       align-items: center;
       gap: 8px;
     }
+    .status-dot { width: 7px; height: 7px; background: var(--accent-green); border-radius: 50%; }
 
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      background: var(--accent-green);
-      border-radius: 50%;
-    }
-
-    /* Container */
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 30px 20px;
       width: 100%;
     }
 
-    /* HERO SECTION */
-    .hero-section {
-      padding: 60px 0;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 50px;
-      align-items: center;
-    }
-
-    .tech-tag {
-      color: var(--accent-green);
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      margin-bottom: 16px;
-      display: inline-block;
-    }
-
-    .hero-heading {
-      font-size: 3.5rem;
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      letter-spacing: -1px;
-    }
-
-    .hero-heading span {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtext {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 30px;
-      max-width: 500px;
-    }
-
-    .btn-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--accent-gradient);
-      color: #ffffff;
-      padding: 16px 32px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2);
-      transition: all 0.25s ease;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 30px rgba(5, 150, 105, 0.35);
-    }
-
-    .hero-card {
-      background: var(--card-bg);
+    /* FULL-SCREEN CAMERA SECTION */
+    .viewport-card {
+      background: #000000;
       border: 1px solid var(--card-border);
       border-radius: 24px;
-      padding: 30px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      height: 380px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
-    }
-
-    .card-header-bar, .card-footer-bar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .avatar-graphic {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .avatar-head {
-      width: 60px;
-      height: 60px;
-      background: #f59e0b;
-      border-radius: 50%;
-      margin-bottom: 8px;
-    }
-
-    .avatar-body {
-      width: 130px;
-      height: 110px;
-      background: #059669;
-      border-radius: 16px 16px 6px 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 1.1rem;
-    }
-
-    /* TRY-ON DASHBOARD SECTION */
-    .app-section {
-      padding: 40px 0 80px;
-      border-top: 1px solid var(--card-border);
-    }
-
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      margin-bottom: 25px;
-    }
-
-    .section-title span {
-      color: var(--accent-green);
-    }
-
-    /* FULL SIZE SCREEN LAYOUT */
-    .grid-layout {
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 25px;
-      align-items: start;
-    }
-
-    .preview-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
       overflow: hidden;
-      width: 100%;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
-    }
-
-    /* Expanded Camera Canvas */
-    .viewport-box {
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
       position: relative;
       width: 100%;
-      height: 680px;
-      background: #0f172a;
+      height: 75vh;
+      min-height: 550px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -276,24 +109,44 @@
 
     .placeholder-text {
       color: #94a3b8;
-      font-size: 1rem;
+      font-size: 1.1rem;
       z-index: 1;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 12px 24px;
+      border-radius: 12px;
     }
 
+    /* Floating Distance Calibration Alert */
+    .distance-banner {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.85);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ACTION BAR BELOW CAMERA */
     .action-bar {
       display: flex;
       gap: 15px;
-      padding: 20px;
-      border-top: 1px solid var(--card-border);
-      background: #ffffff;
+      margin-top: 20px;
     }
 
     .btn {
       flex: 1;
-      padding: 14px;
-      border-radius: 10px;
+      padding: 16px;
+      border-radius: 12px;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -308,21 +161,39 @@
     .btn-primary:hover { background: #047857; }
 
     .btn-secondary {
-      background: #f1f5f9;
+      background: #ffffff;
       color: var(--text-main);
       border: 1px solid var(--card-border);
     }
-    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-secondary:hover { background: #f1f5f9; }
 
-    .sidebar-card {
+    .btn-capture {
+      background: #0f172a;
+      color: #ffffff;
+    }
+    .btn-capture:hover { background: #1e293b; }
+
+    /* SIZE DISPLAY & CONTROLS DASHBOARD (BELOW CAMERA) */
+    .controls-dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-top: 25px;
+    }
+
+    .dashboard-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      padding: 24px;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+    }
+
+    .card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
 
     .sidebar-label {
@@ -333,76 +204,65 @@
       letter-spacing: 1px;
     }
 
-    .uniform-title {
-      font-size: 1.4rem;
+    /* Interactive Size Mode Selector Button */
+    .mode-toggle-group {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 10px;
+      gap: 4px;
+    }
+
+    .toggle-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.75rem;
       font-weight: 700;
-      margin-top: 4px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
     }
 
-    /* Size Display Cards */
-    .size-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .toggle-btn.active {
+      background: #ffffff;
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
 
-    .size-recommend-box {
+    .size-display-box {
       background: #f8fafc;
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 18px;
+      border-radius: 16px;
+      padding: 25px;
       text-align: center;
     }
 
-    .size-recommend-box .label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 700;
-    }
-
-    .size-number {
-      font-size: 2.2rem;
+    .size-main-number {
+      font-size: 3.5rem;
       font-weight: 800;
       color: var(--accent-green);
-      margin-top: 4px;
-    }
-
-    /* Accuracy Info Box */
-    .accuracy-info {
-      background: #f8fafc;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .accuracy-info strong {
-      color: var(--text-main);
-      display: block;
-      margin-bottom: 4px;
+      line-height: 1;
+      margin-top: 8px;
     }
 
     .adjustment-group {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      border-top: 1px solid var(--card-border);
-      padding-top: 18px;
+      gap: 16px;
     }
 
     .slider-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-muted);
     }
 
     .slider-row input[type="range"] {
-      width: 55%;
+      width: 60%;
       accent-color: var(--accent-green);
       cursor: pointer;
     }
@@ -410,10 +270,9 @@
     input[type="file"] { display: none; }
 
     @media (max-width: 900px) {
-      header { padding: 15px 20px; }
-      .hero-section { grid-template-columns: 1fr; text-align: center; }
-      .grid-layout { grid-template-columns: 1fr; }
-      .viewport-box { height: 450px; }
+      .controls-dashboard { grid-template-columns: 1fr; }
+      .viewport-card { height: 50vh; }
+      .action-bar { flex-direction: column; }
     }
   </style>
 </head>
@@ -425,112 +284,72 @@
       <div class="logo-badge">APS</div>
       <div>
         <div class="brand-title">APS SmartFit</div>
-        <div class="brand-subtitle">AI Uniform Experience</div>
+        <div class="brand-subtitle">AI Virtual Fitting Room</div>
       </div>
     </div>
     <div class="status-pill">
       <div class="status-dot"></div>
-      AI READY
+      CALIBRATED FOR 1 METER
     </div>
   </header>
 
   <div class="container">
     
-    <!-- HERO LANDING SECTION -->
-    <section class="hero-section">
-      <div>
-        <span class="tech-tag">◆ SMART UNIFORM TECHNOLOGY</span>
-        <h1 class="hero-heading">Try your uniform. <span>Virtually.</span></h1>
-        <p class="hero-subtext">
-          Experience your school uniform digitally, preview your selected uniform, and receive AI-based size recommendations.
-        </p>
-        <a href="#tryon-app" class="btn-cta">Start Virtual Try-On →</a>
+    <!-- FULL SCREEN CAMERA VIEWPORT -->
+    <div class="viewport-card">
+      <div class="distance-banner">📏 Stand approximately 1 meter (3 feet) from camera</div>
+      <video id="webcam" playsinline style="display:none;"></video>
+      <canvas id="output-canvas" width="1280" height="720"></canvas>
+      <span class="placeholder-text" id="placeholder-text">Start camera or upload photo to view full-screen preview</span>
+    </div>
+
+    <!-- MAIN CONTROL BUTTONS BELOW CAMERA -->
+    <div class="action-bar">
+      <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
+      <label class="btn btn-secondary">
+        📁 Upload Photo
+        <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+      </label>
+      <button class="btn btn-capture" onclick="takeSnapshot()">📸 Take Photo</button>
+    </div>
+
+    <!-- CONTROL DASHBOARD BELOW CAMERA -->
+    <div class="controls-dashboard">
+      
+      <!-- Recommended Size Card -->
+      <div class="dashboard-card">
+        <div class="card-title-row">
+          <span class="sidebar-label">Recommended Size (at 1 Meter)</span>
+          <div class="mode-toggle-group">
+            <button class="toggle-btn active" id="btn-alpha" onclick="setSizeMode('alpha')">Alphabetical</button>
+            <button class="toggle-btn" id="btn-num" onclick="setSizeMode('numeric')">Numeric</button>
+          </div>
+        </div>
+
+        <div class="size-display-box">
+          <div class="sidebar-label" id="size-mode-label">ALPHA SIZE</div>
+          <div class="size-main-number" id="size-display">--</div>
+        </div>
       </div>
 
-      <div class="hero-card">
-        <div class="card-header-bar">
-          <span>AI VIRTUAL FIT</span>
-          <span style="color: var(--accent-green);">● LIVE</span>
+      <!-- Fine-Tune Manual Overlay Adjustments -->
+      <div class="dashboard-card">
+        <div class="card-title-row">
+          <span class="sidebar-label">Fine Tune Fit Overlay</span>
         </div>
-        <div class="avatar-graphic">
-          <div class="avatar-head"></div>
-          <div class="avatar-body">APS</div>
-        </div>
-        <div class="card-footer-bar">
-          <span>BODY DETECTION</span>
-          <span>READY</span>
+        <div class="adjustment-group">
+          <div class="slider-row">
+            <span>Uniform Scale</span>
+            <input type="range" id="scale-slider" min="1.8" max="4.5" step="0.05" value="3.20">
+          </div>
+          <div class="slider-row">
+            <span>Vertical Offset</span>
+            <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- TRY-ON APPLICATION SECTION -->
-    <section class="app-section" id="tryon-app">
-      <h2 class="section-title">Your uniform <span>preview</span></h2>
-
-      <div class="grid-layout">
-        
-        <!-- Full-Size Screen Viewport -->
-        <div class="preview-card">
-          <div class="viewport-box">
-            <video id="webcam" playsinline style="display:none;"></video>
-            <canvas id="output-canvas" width="1280" height="720"></canvas>
-            <span class="placeholder-text" id="placeholder-text">Upload a photo or start live camera to preview</span>
-          </div>
-
-          <div class="action-bar">
-            <button class="btn btn-primary" onclick="startWebcam()">📷 Live Camera</button>
-            <label class="btn btn-secondary">
-              📁 Upload Photo
-              <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
-            </label>
-          </div>
-        </div>
-
-        <!-- Sidebar Controls & Size Info -->
-        <div class="sidebar-card">
-          <div>
-            <div class="sidebar-label">Selected Uniform</div>
-            <div class="uniform-title">Summer Uniform</div>
-          </div>
-
-          <!-- Dual Size Display (XXS–XXXL & 28–42) -->
-          <div class="size-container">
-            <div class="size-recommend-box">
-              <div class="label">ALPHA SIZE</div>
-              <div class="size-number" id="size-alpha">--</div>
-            </div>
-            <div class="size-recommend-box">
-              <div class="label">NUMERIC SIZE</div>
-              <div class="size-number" id="size-num">--</div>
-            </div>
-          </div>
-
-          <!-- Explanation of Size Accuracy -->
-          <div class="accuracy-info">
-            <strong>Why sizes vary in camera previews:</strong>
-            <ul style="padding-left: 15px; margin-top: 4px;">
-              <li>Distance from camera changes pixel scale.</li>
-              <li>Camera angle or lens distortion alters proportions.</li>
-              <li>2D video estimates body depth without a 3D scanner.</li>
-            </ul>
-          </div>
-
-          <!-- Alignment Sliders -->
-          <div class="adjustment-group">
-            <div class="sidebar-label">Fine Tune Alignment</div>
-            <div class="slider-row">
-              <span>Size Scale</span>
-              <input type="range" id="scale-slider" min="1.8" max="4.5" step="0.05" value="3.20">
-            </div>
-            <div class="slider-row">
-              <span>Vertical Offset</span>
-              <input type="range" id="y-slider" min="-0.20" max="0.40" step="0.01" value="0.05">
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
+    </div>
 
   </div>
 
@@ -538,8 +357,8 @@
     const videoElement = document.getElementById('webcam');
     const canvasElement = document.getElementById('output-canvas');
     const canvasCtx = canvasElement.getContext('2d');
-    const sizeAlpha = document.getElementById('size-alpha');
-    const sizeNum = document.getElementById('size-num');
+    const sizeDisplay = document.getElementById('size-display');
+    const sizeModeLabel = document.getElementById('size-mode-label');
     const placeholderText = document.getElementById('placeholder-text');
 
     const scaleSlider = document.getElementById('scale-slider');
@@ -551,17 +370,41 @@
     let pose;
     let camera;
     let currentSourceImage = null;
+    let currentSizeMode = 'alpha'; // Default mode: 'alpha' or 'numeric'
 
-    // Calculates both Alpha (XXS-XXXL) and Numeric (28-42) sizes
-    function calculateSizes(shoulderPx) {
-      if (shoulderPx < 180) return { alpha: "XXS", num: "28" };
-      if (shoulderPx >= 180 && shoulderPx < 210) return { alpha: "XS", num: "30" };
-      if (shoulderPx >= 210 && shoulderPx < 240) return { alpha: "S", num: "32" };
-      if (shoulderPx >= 240 && shoulderPx < 270) return { alpha: "M", num: "34" };
-      if (shoulderPx >= 270 && shoulderPx < 300) return { alpha: "L", num: "36" };
-      if (shoulderPx >= 300 && shoulderPx < 330) return { alpha: "XL", num: "38" };
-      if (shoulderPx >= 330 && shoulderPx < 360) return { alpha: "XXL", num: "40" };
-      return { alpha: "XXXL", num: "42" };
+    // Real-world shoulder pixel distance calibration at 1 meter distance
+    function calculateSize(shoulderPx) {
+      const alphaSizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+      const numSizes   = ["28",  "30", "32", "34", "36", "38",  "40",  "42"];
+
+      let idx = 0;
+      if (shoulderPx < 180) idx = 0;
+      else if (shoulderPx < 210) idx = 1;
+      else if (shoulderPx < 240) idx = 2;
+      else if (shoulderPx < 270) idx = 3;
+      else if (shoulderPx < 300) idx = 4;
+      else if (shoulderPx < 330) idx = 5;
+      else if (shoulderPx < 360) idx = 6;
+      else idx = 7;
+
+      return currentSizeMode === 'alpha' ? alphaSizes[idx] : numSizes[idx];
+    }
+
+    // Interactive Size Mode Unit Switcher
+    function setSizeMode(mode) {
+      currentSizeMode = mode;
+      document.getElementById('btn-alpha').classList.toggle('active', mode === 'alpha');
+      document.getElementById('btn-num').classList.toggle('active', mode === 'numeric');
+      sizeModeLabel.innerText = mode === 'alpha' ? 'ALPHA SIZE' : 'NUMERIC SIZE';
+    }
+
+    // Photo Snapshot Capability
+    function takeSnapshot() {
+      const dataURL = canvasElement.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'APS-Uniform-TryOn.png';
+      link.href = dataURL;
+      link.click();
     }
 
     function onResults(results) {
@@ -590,9 +433,7 @@
           const shoulderDistance = Math.sqrt(dx * dx + dy * dy);
           const angle = Math.atan2(dy, dx);
 
-          const sizeResult = calculateSizes(shoulderDistance);
-          sizeAlpha.innerText = sizeResult.alpha;
-          sizeNum.innerText = sizeResult.num;
+          sizeDisplay.innerText = calculateSize(shoulderDistance);
 
           const userScale = parseFloat(scaleSlider.value);
           const userYShift = parseFloat(ySlider.value);
