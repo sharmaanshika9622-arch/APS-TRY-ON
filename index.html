@@ -493,15 +493,15 @@
           <div class="adjustment-group">
             <div class="slider-row">
               <span>Width Fine-Tune</span>
-              <input type="range" id="width-slider" min="3.0" max="6.0" step="0.1" value="4.5">
+              <input type="range" id="width-slider" min="1.5" max="3.5" step="0.05" value="2.20">
             </div>
             <div class="slider-row">
               <span>Height Fine-Tune</span>
-              <input type="range" id="height-slider" min="2.0" max="5.0" step="0.1" value="3.5">
+              <input type="range" id="height-slider" min="1.0" max="3.0" step="0.05" value="1.80">
             </div>
             <div class="slider-row">
               <span>Collar / Neck Position</span>
-              <input type="range" id="y-slider" min="-0.60" max="0.20" step="0.01" value="-0.25">
+              <input type="range" id="y-slider" min="-0.30" max="0.30" step="0.01" value="0.05">
             </div>
           </div>
         </div>
@@ -532,8 +532,9 @@
     let isAtOneMeter = false;
     let lastShoulderPx = 0;
 
-    const MIN_SHOULDER_PX_1M = 140; 
-    const MAX_SHOULDER_PX_1M = 280; 
+    // Realistic distance bounds in 720p resolution
+    const MIN_SHOULDER_PX_1M = 220; 
+    const MAX_SHOULDER_PX_1M = 420; 
 
     function checkDistanceAndSetSize(shoulderPx) {
       lastShoulderPx = shoulderPx;
@@ -636,10 +637,11 @@
           canvasCtx.translate(midShoulderX, anchorY);
           canvasCtx.rotate(angle);
 
+          // Draw centered smoothly over the shoulders
           canvasCtx.drawImage(
             uniformImg,
             -uniformWidth / 2,
-            -uniformHeight * 0.15,
+            0,
             uniformWidth,
             uniformHeight
           );
