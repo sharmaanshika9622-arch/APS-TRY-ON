@@ -5,22 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>APS SmartFit AI - Virtual Uniform Experience</title>
 
+  <!-- MediaPipe Pose Engine -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+    /* UPDATED COLOR PALETTE: Deep Obsidian Navy & Vibrant Emerald */
     :root {
-      --bg-dark: #070d19;
-      --card-bg: #0d172a;
+      --bg-dark: #0b1320;              /* Rich deep slate navy background */
+      --card-bg: #131e30;              /* Smooth card background */
       --card-border: rgba(255, 255, 255, 0.08);
-      --accent-blue: #3b82f6;
-      --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-      --text-main: #ffffff;
+      --accent-green: #10b981;           /* Modern emerald accent */
+      --accent-light-green: #34d399;     /* Light green for text highlights */
+      --accent-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --green-badge: #4ade80;
-      --green-bg: rgba(34, 197, 94, 0.15);
+      --status-bg: rgba(16, 185, 129, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,6 +32,9 @@
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(52, 211, 153, 0.05) 0%, transparent 40%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
@@ -47,7 +52,7 @@
       align-items: center;
       padding: 18px 60px;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(7, 13, 25, 0.85);
+      background: rgba(11, 19, 32, 0.85);
       backdrop-filter: blur(12px);
     }
 
@@ -59,7 +64,7 @@
 
     .logo-badge {
       background: #ffffff;
-      color: #070d19;
+      color: #0b1320;
       font-weight: 800;
       font-size: 0.85rem;
       padding: 6px 12px;
@@ -77,8 +82,8 @@
     }
 
     .status-pill {
-      background: var(--green-bg);
-      color: var(--green-badge);
+      background: var(--status-bg);
+      color: var(--accent-light-green);
       font-size: 0.75rem;
       font-weight: 700;
       padding: 6px 14px;
@@ -91,7 +96,7 @@
     .status-dot {
       width: 7px;
       height: 7px;
-      background: var(--green-badge);
+      background: var(--accent-light-green);
       border-radius: 50%;
     }
 
@@ -114,7 +119,7 @@
     }
 
     .tech-tag {
-      color: var(--accent-blue);
+      color: var(--accent-light-green);
       font-size: 0.75rem;
       font-weight: 800;
       letter-spacing: 1.5px;
@@ -131,7 +136,7 @@
     }
 
     .hero-heading span {
-      background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+      background: linear-gradient(135deg, #34d399 0%, #6ee7b7 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -155,7 +160,7 @@
       font-weight: 700;
       font-size: 1rem;
       text-decoration: none;
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
       transition: all 0.25s ease;
       cursor: pointer;
       border: none;
@@ -163,7 +168,7 @@
 
     .btn-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 15px 30px rgba(59, 130, 246, 0.45);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
     }
 
     /* Hero Stats Bar */
@@ -230,7 +235,7 @@
     .avatar-body {
       width: 130px;
       height: 120px;
-      background: #1e3a8a;
+      background: #0f4c3a;
       border-radius: 16px 16px 6px 6px;
       display: flex;
       align-items: center;
@@ -245,8 +250,8 @@
       position: absolute;
       width: 220px;
       height: 2px;
-      background: var(--accent-blue);
-      box-shadow: 0 0 12px var(--accent-blue);
+      background: var(--accent-green);
+      box-shadow: 0 0 12px var(--accent-green);
       top: 55%;
     }
 
@@ -254,9 +259,9 @@
       position: absolute;
       width: 8px;
       height: 8px;
-      background: #60a5fa;
+      background: var(--accent-light-green);
       border-radius: 50%;
-      box-shadow: 0 0 8px #60a5fa;
+      box-shadow: 0 0 8px var(--accent-light-green);
     }
 
     .dot-tl { top: 30%; left: -30px; }
@@ -274,7 +279,6 @@
       letter-spacing: 1px;
     }
 
-
     /* DASHBOARD / TRY-ON APPLICATION SECTION */
     .app-section {
       padding: 60px 0 100px;
@@ -289,7 +293,7 @@
     }
 
     .section-title span {
-      color: #60a5fa;
+      color: var(--accent-light-green);
     }
 
     .grid-layout {
@@ -310,7 +314,7 @@
       position: relative;
       width: 100%;
       height: 480px;
-      background: #000000;
+      background: #050a12;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -336,7 +340,7 @@
       gap: 15px;
       padding: 20px;
       border-top: 1px solid var(--card-border);
-      background: rgba(13, 23, 42, 0.6);
+      background: rgba(19, 30, 48, 0.6);
     }
 
     .btn {
@@ -355,8 +359,8 @@
       border: none;
     }
 
-    .btn-primary { background: var(--accent-blue); color: #ffffff; }
-    .btn-primary:hover { background: #2563eb; }
+    .btn-primary { background: var(--accent-green); color: #ffffff; }
+    .btn-primary:hover { background: #059669; }
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.06);
@@ -396,7 +400,7 @@
     }
 
     .size-recommend-box {
-      background: rgba(7, 13, 25, 0.7);
+      background: rgba(11, 19, 32, 0.7);
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 22px;
@@ -411,7 +415,7 @@
     .size-number {
       font-size: 3rem;
       font-weight: 800;
-      color: #60a5fa;
+      color: var(--accent-light-green);
       margin-top: 4px;
     }
 
@@ -434,7 +438,7 @@
 
     .slider-row input[type="range"] {
       width: 55%;
-      accent-color: var(--accent-blue);
+      accent-color: var(--accent-green);
       cursor: pointer;
     }
 
@@ -452,6 +456,7 @@
 </head>
 <body>
 
+  <!-- Navigation Bar -->
   <header>
     <div class="brand-logo">
       <div class="logo-badge">APS</div>
@@ -468,6 +473,7 @@
 
   <div class="container">
     
+    <!-- HERO LANDING SECTION -->
     <section class="hero-section">
       <div>
         <span class="tech-tag">◆ SMART UNIFORM TECHNOLOGY</span>
@@ -494,10 +500,11 @@
         </div>
       </div>
 
+      <!-- Right Graphic Card -->
       <div class="hero-card">
         <div class="card-header-bar">
           <span>AI VIRTUAL FIT</span>
-          <span style="color: var(--green-badge);">● LIVE</span>
+          <span style="color: var(--accent-light-green);">● LIVE</span>
         </div>
 
         <div class="avatar-graphic">
@@ -518,11 +525,13 @@
       </div>
     </section>
 
+    <!-- TRY-ON APPLICATION DASHBOARD SECTION -->
     <section class="app-section" id="tryon-app">
       <h2 class="section-title">Your uniform <span>preview</span></h2>
 
       <div class="grid-layout">
         
+        <!-- Interactive Canvas Card -->
         <div class="preview-card">
           <div class="viewport-box">
             <video id="webcam" playsinline style="display:none;"></video>
@@ -539,6 +548,7 @@
           </div>
         </div>
 
+        <!-- Sidebar Options -->
         <div class="sidebar-card">
           <div>
             <div class="sidebar-label">Selected Uniform</div>
@@ -553,6 +563,7 @@
             <div class="size-number" id="size-display">--</div>
           </div>
 
+          <!-- Real-time Fine Tune Controls -->
           <div class="adjustment-group">
             <div class="sidebar-label">Fine Tune Alignment</div>
             <div class="slider-row">
