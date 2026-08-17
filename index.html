@@ -12,17 +12,17 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* UPDATED COLOR PALETTE: Deep Obsidian Navy & Vibrant Emerald */
+    /* LIGHT THEME PALETTE */
     :root {
-      --bg-dark: #0b1320;              /* Rich deep slate navy background */
-      --card-bg: #131e30;              /* Smooth card background */
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent-green: #10b981;           /* Modern emerald accent */
-      --accent-light-green: #34d399;     /* Light green for text highlights */
+      --bg-light: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: rgba(15, 23, 42, 0.08);
+      --accent-green: #059669;
+      --accent-light-green: #10b981;
       --accent-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --status-bg: rgba(16, 185, 129, 0.15);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --status-bg: rgba(16, 185, 129, 0.12);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,10 +31,10 @@
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-dark);
+      background-color: var(--bg-light);
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(52, 211, 153, 0.05) 0%, transparent 40%);
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(5, 150, 105, 0.04) 0%, transparent 40%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
@@ -42,7 +42,7 @@
       overflow-x: hidden;
     }
 
-    /* Top Navigation Bar */
+    /* Navigation Bar */
     header {
       position: sticky;
       top: 0;
@@ -52,7 +52,7 @@
       align-items: center;
       padding: 18px 60px;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(11, 19, 32, 0.85);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(12px);
     }
 
@@ -63,8 +63,8 @@
     }
 
     .logo-badge {
-      background: #ffffff;
-      color: #0b1320;
+      background: #0f172a;
+      color: #ffffff;
       font-weight: 800;
       font-size: 0.85rem;
       padding: 6px 12px;
@@ -83,7 +83,7 @@
 
     .status-pill {
       background: var(--status-bg);
-      color: var(--accent-light-green);
+      color: var(--accent-green);
       font-size: 0.75rem;
       font-weight: 700;
       padding: 6px 14px;
@@ -96,30 +96,29 @@
     .status-dot {
       width: 7px;
       height: 7px;
-      background: var(--accent-light-green);
+      background: var(--accent-green);
       border-radius: 50%;
     }
 
     /* Container */
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 0 20px;
       width: 100%;
     }
 
-    /* HERO LANDING SECTION */
+    /* HERO SECTION */
     .hero-section {
-      padding: 70px 0 90px;
+      padding: 60px 0;
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
       gap: 50px;
       align-items: center;
-      min-height: calc(100vh - 80px);
     }
 
     .tech-tag {
-      color: var(--accent-light-green);
+      color: var(--accent-green);
       font-size: 0.75rem;
       font-weight: 800;
       letter-spacing: 1.5px;
@@ -128,7 +127,7 @@
     }
 
     .hero-heading {
-      font-size: 3.8rem;
+      font-size: 3.5rem;
       font-weight: 800;
       line-height: 1.1;
       margin-bottom: 20px;
@@ -136,7 +135,7 @@
     }
 
     .hero-heading span {
-      background: linear-gradient(135deg, #34d399 0%, #6ee7b7 100%);
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -145,7 +144,7 @@
       font-size: 1.05rem;
       color: var(--text-muted);
       line-height: 1.6;
-      margin-bottom: 35px;
+      margin-bottom: 30px;
       max-width: 500px;
     }
 
@@ -160,7 +159,7 @@
       font-weight: 700;
       font-size: 1rem;
       text-decoration: none;
-      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
+      box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2);
       transition: all 0.25s ease;
       cursor: pointer;
       border: none;
@@ -168,31 +167,9 @@
 
     .btn-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 15px 30px rgba(5, 150, 105, 0.35);
     }
 
-    /* Hero Stats Bar */
-    .hero-features {
-      display: flex;
-      gap: 40px;
-      margin-top: 50px;
-      padding-top: 30px;
-      border-top: 1px solid var(--card-border);
-    }
-
-    .feature-item .title {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #ffffff;
-    }
-
-    .feature-item .sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* Hero Graphic Card */
     .hero-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -203,11 +180,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      height: 420px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      height: 380px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
     }
 
-    .card-header-bar {
+    .card-header-bar, .card-footer-bar {
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -221,21 +198,20 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 15px;
     }
 
     .avatar-head {
       width: 60px;
       height: 60px;
-      background: #d97706;
+      background: #f59e0b;
       border-radius: 50%;
       margin-bottom: 8px;
     }
 
     .avatar-body {
       width: 130px;
-      height: 120px;
-      background: #0f4c3a;
+      height: 110px;
+      background: #059669;
       border-radius: 16px 16px 6px 6px;
       display: flex;
       align-items: center;
@@ -243,62 +219,28 @@
       color: #ffffff;
       font-weight: 800;
       font-size: 1.1rem;
-      letter-spacing: 1px;
     }
 
-    .scan-line {
-      position: absolute;
-      width: 220px;
-      height: 2px;
-      background: var(--accent-green);
-      box-shadow: 0 0 12px var(--accent-green);
-      top: 55%;
-    }
-
-    .tracker-dot {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: var(--accent-light-green);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-light-green);
-    }
-
-    .dot-tl { top: 30%; left: -30px; }
-    .dot-tr { top: 30%; right: -30px; }
-    .dot-bl { bottom: 20%; left: -30px; }
-    .dot-br { bottom: 20%; right: -30px; }
-
-    .card-footer-bar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-    }
-
-    /* DASHBOARD / TRY-ON APPLICATION SECTION */
+    /* TRY-ON DASHBOARD SECTION */
     .app-section {
-      padding: 60px 0 100px;
+      padding: 40px 0 80px;
       border-top: 1px solid var(--card-border);
     }
 
     .section-title {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       font-weight: 800;
-      margin-bottom: 30px;
-      letter-spacing: -0.5px;
+      margin-bottom: 25px;
     }
 
     .section-title span {
-      color: var(--accent-light-green);
+      color: var(--accent-green);
     }
 
+    /* FULL SIZE SCREEN LAYOUT */
     .grid-layout {
       display: grid;
-      grid-template-columns: 1fr 360px;
+      grid-template-columns: 1fr 380px;
       gap: 25px;
       align-items: start;
     }
@@ -308,13 +250,16 @@
       border: 1px solid var(--card-border);
       border-radius: 20px;
       overflow: hidden;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
     }
 
+    /* Expanded Camera Canvas */
     .viewport-box {
       position: relative;
       width: 100%;
-      height: 480px;
-      background: #050a12;
+      height: 680px;
+      background: #0f172a;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -330,8 +275,8 @@
     }
 
     .placeholder-text {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      color: #94a3b8;
+      font-size: 1rem;
       z-index: 1;
     }
 
@@ -340,7 +285,7 @@
       gap: 15px;
       padding: 20px;
       border-top: 1px solid var(--card-border);
-      background: rgba(19, 30, 48, 0.6);
+      background: #ffffff;
     }
 
     .btn {
@@ -360,14 +305,14 @@
     }
 
     .btn-primary { background: var(--accent-green); color: #ffffff; }
-    .btn-primary:hover { background: #059669; }
+    .btn-primary:hover { background: #047857; }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.06);
+      background: #f1f5f9;
       color: var(--text-main);
       border: 1px solid var(--card-border);
     }
-    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); }
+    .btn-secondary:hover { background: #e2e8f0; }
 
     .sidebar-card {
       background: var(--card-bg);
@@ -376,7 +321,8 @@
       padding: 26px;
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
     }
 
     .sidebar-label {
@@ -393,30 +339,49 @@
       margin-top: 4px;
     }
 
-    .description {
-      font-size: 0.85rem;
+    /* Size Display Cards */
+    .size-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .size-recommend-box {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .size-recommend-box .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .size-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent-green);
+      margin-top: 4px;
+    }
+
+    /* Accuracy Info Box */
+    .accuracy-info {
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 0.8rem;
       color: var(--text-muted);
       line-height: 1.5;
     }
 
-    .size-recommend-box {
-      background: rgba(11, 19, 32, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 22px;
-    }
-
-    .size-recommend-box .label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .size-number {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--accent-light-green);
-      margin-top: 4px;
+    .accuracy-info strong {
+      color: var(--text-main);
+      display: block;
+      margin-bottom: 4px;
     }
 
     .adjustment-group {
@@ -446,11 +411,9 @@
 
     @media (max-width: 900px) {
       header { padding: 15px 20px; }
-      .hero-section { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-      .hero-subtext { margin: 0 auto 30px; }
-      .hero-features { justify-content: center; }
+      .hero-section { grid-template-columns: 1fr; text-align: center; }
       .grid-layout { grid-template-columns: 1fr; }
-      .hero-heading { font-size: 2.8rem; }
+      .viewport-box { height: 450px; }
     }
   </style>
 </head>
@@ -479,45 +442,20 @@
         <span class="tech-tag">◆ SMART UNIFORM TECHNOLOGY</span>
         <h1 class="hero-heading">Try your uniform. <span>Virtually.</span></h1>
         <p class="hero-subtext">
-          Experience your school uniform digitally, preview your selected uniform and receive an AI-based size recommendation.
+          Experience your school uniform digitally, preview your selected uniform, and receive AI-based size recommendations.
         </p>
-        
         <a href="#tryon-app" class="btn-cta">Start Virtual Try-On →</a>
-
-        <div class="hero-features">
-          <div class="feature-item">
-            <div class="title">AI</div>
-            <div class="sub">Powered</div>
-          </div>
-          <div class="feature-item">
-            <div class="title">LIVE</div>
-            <div class="sub">Camera</div>
-          </div>
-          <div class="feature-item">
-            <div class="title">SMART</div>
-            <div class="sub">Fit Estimate</div>
-          </div>
-        </div>
       </div>
 
-      <!-- Right Graphic Card -->
       <div class="hero-card">
         <div class="card-header-bar">
           <span>AI VIRTUAL FIT</span>
-          <span style="color: var(--accent-light-green);">● LIVE</span>
+          <span style="color: var(--accent-green);">● LIVE</span>
         </div>
-
         <div class="avatar-graphic">
           <div class="avatar-head"></div>
           <div class="avatar-body">APS</div>
-          <div class="scan-line"></div>
-
-          <div class="tracker-dot dot-tl"></div>
-          <div class="tracker-dot dot-tr"></div>
-          <div class="tracker-dot dot-bl"></div>
-          <div class="tracker-dot dot-br"></div>
         </div>
-
         <div class="card-footer-bar">
           <span>BODY DETECTION</span>
           <span>READY</span>
@@ -525,17 +463,17 @@
       </div>
     </section>
 
-    <!-- TRY-ON APPLICATION DASHBOARD SECTION -->
+    <!-- TRY-ON APPLICATION SECTION -->
     <section class="app-section" id="tryon-app">
       <h2 class="section-title">Your uniform <span>preview</span></h2>
 
       <div class="grid-layout">
         
-        <!-- Interactive Canvas Card -->
+        <!-- Full-Size Screen Viewport -->
         <div class="preview-card">
           <div class="viewport-box">
             <video id="webcam" playsinline style="display:none;"></video>
-            <canvas id="output-canvas" width="640" height="480"></canvas>
+            <canvas id="output-canvas" width="1280" height="720"></canvas>
             <span class="placeholder-text" id="placeholder-text">Upload a photo or start live camera to preview</span>
           </div>
 
@@ -548,22 +486,36 @@
           </div>
         </div>
 
-        <!-- Sidebar Options -->
+        <!-- Sidebar Controls & Size Info -->
         <div class="sidebar-card">
           <div>
             <div class="sidebar-label">Selected Uniform</div>
             <div class="uniform-title">Summer Uniform</div>
-            <p class="description" style="margin-top: 8px;">
-              This prototype demonstrates the basic virtual overlay concept. Real transparent APS uniform images can be added here.
-            </p>
           </div>
 
-          <div class="size-recommend-box">
-            <div class="label">Recommended Size</div>
-            <div class="size-number" id="size-display">--</div>
+          <!-- Dual Size Display (XXS–XXXL & 28–42) -->
+          <div class="size-container">
+            <div class="size-recommend-box">
+              <div class="label">ALPHA SIZE</div>
+              <div class="size-number" id="size-alpha">--</div>
+            </div>
+            <div class="size-recommend-box">
+              <div class="label">NUMERIC SIZE</div>
+              <div class="size-number" id="size-num">--</div>
+            </div>
           </div>
 
-          <!-- Real-time Fine Tune Controls -->
+          <!-- Explanation of Size Accuracy -->
+          <div class="accuracy-info">
+            <strong>Why sizes vary in camera previews:</strong>
+            <ul style="padding-left: 15px; margin-top: 4px;">
+              <li>Distance from camera changes pixel scale.</li>
+              <li>Camera angle or lens distortion alters proportions.</li>
+              <li>2D video estimates body depth without a 3D scanner.</li>
+            </ul>
+          </div>
+
+          <!-- Alignment Sliders -->
           <div class="adjustment-group">
             <div class="sidebar-label">Fine Tune Alignment</div>
             <div class="slider-row">
@@ -586,7 +538,8 @@
     const videoElement = document.getElementById('webcam');
     const canvasElement = document.getElementById('output-canvas');
     const canvasCtx = canvasElement.getContext('2d');
-    const sizeDisplay = document.getElementById('size-display');
+    const sizeAlpha = document.getElementById('size-alpha');
+    const sizeNum = document.getElementById('size-num');
     const placeholderText = document.getElementById('placeholder-text');
 
     const scaleSlider = document.getElementById('scale-slider');
@@ -599,11 +552,16 @@
     let camera;
     let currentSourceImage = null;
 
-    function calculateSize(shoulderWidthPx) {
-      if (shoulderWidthPx < 130) return "S";
-      if (shoulderWidthPx >= 130 && shoulderWidthPx < 170) return "M";
-      if (shoulderWidthPx >= 170 && shoulderWidthPx < 210) return "L";
-      return "XL";
+    // Calculates both Alpha (XXS-XXXL) and Numeric (28-42) sizes
+    function calculateSizes(shoulderPx) {
+      if (shoulderPx < 180) return { alpha: "XXS", num: "28" };
+      if (shoulderPx >= 180 && shoulderPx < 210) return { alpha: "XS", num: "30" };
+      if (shoulderPx >= 210 && shoulderPx < 240) return { alpha: "S", num: "32" };
+      if (shoulderPx >= 240 && shoulderPx < 270) return { alpha: "M", num: "34" };
+      if (shoulderPx >= 270 && shoulderPx < 300) return { alpha: "L", num: "36" };
+      if (shoulderPx >= 300 && shoulderPx < 330) return { alpha: "XL", num: "38" };
+      if (shoulderPx >= 330 && shoulderPx < 360) return { alpha: "XXL", num: "40" };
+      return { alpha: "XXXL", num: "42" };
     }
 
     function onResults(results) {
@@ -632,7 +590,9 @@
           const shoulderDistance = Math.sqrt(dx * dx + dy * dy);
           const angle = Math.atan2(dy, dx);
 
-          sizeDisplay.innerText = calculateSize(shoulderDistance);
+          const sizeResult = calculateSizes(shoulderDistance);
+          sizeAlpha.innerText = sizeResult.alpha;
+          sizeNum.innerText = sizeResult.num;
 
           const userScale = parseFloat(scaleSlider.value);
           const userYShift = parseFloat(ySlider.value);
@@ -691,8 +651,8 @@
             await pose.send({ image: videoElement });
           }
         },
-        width: 640,
-        height: 480
+        width: 1280,
+        height: 720
       });
 
       camera.start();
@@ -710,8 +670,8 @@
         img.onload = async () => {
           currentSourceImage = img;
           
-          canvasElement.width = 640;
-          canvasElement.height = 480;
+          canvasElement.width = 1280;
+          canvasElement.height = 720;
 
           if (!pose) initPose();
           await pose.send({ image: img });
